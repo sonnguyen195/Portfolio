@@ -1,0 +1,50 @@
+{
+  "fileKey": "zKZazivgUVEjrNaJHasfTl",
+  "frames": [
+    { "page": "► Surveillance Dashboard", "id": "11489:11605", "name": "Surveillance Dashboard" },
+    { "page": "► Surveillance Dashboard", "id": "13233:2604", "name": "Surveillance Dashboard" },
+
+    { "page": "► Multi-Stream Monitor", "id": "4691:16672", "name": "Multi-Stream Monitor-3x3" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:16697", "name": "Multi-Stream Monitor-Feed" },
+    { "page": "► Multi-Stream Monitor", "id": "7746:15567", "name": "Multi-Stream Monitor-Feed" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:16728", "name": "Multi-Stream Monitor-Feed" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:16767", "name": "Multi-Stream Monitor-Feed" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:16791", "name": "Multi-Stream Monitor-3x3" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:16822", "name": "Multi-Stream Monitor-2x2" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:16844", "name": "Multi-Stream Monitor-Draw" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:16884", "name": "Multi-Stream Monitor-1" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:24994", "name": "Multi-Stream Monitor-Feed" },
+    { "page": "► Multi-Stream Monitor", "id": "7773:8158", "name": "Multi-Stream Monitor-Feed" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:25025", "name": "Multi-Stream Monitor-Feed" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:25064", "name": "Multi-Stream Monitor-Feed" },
+    { "page": "► Multi-Stream Monitor", "id": "4691:26437", "name": "Multi-Stream Monitor-Draw" },
+
+    { "page": "---> Add New Device", "id": "2499:41280", "name": "Add New Device" },
+    { "page": "---> Add New Device", "id": "2499:52470", "name": "Add New Device" },
+
+    { "page": "---> Edit Device", "id": "2499:43918", "name": "Edit Device- Technical Specifications" },
+    { "page": "---> Edit Device", "id": "2499:44074", "name": "Edit Device- Payload & Sensor Systems" },
+    { "page": "---> Edit Device", "id": "2499:44228", "name": "Edit Device- Regulatory & Operational Information" },
+    { "page": "---> Edit Device", "id": "2499:44338", "name": "Edit Device- Attachments" },
+
+    { "page": "► Terminal (GuardianX)", "id": "4279:42552", "name": "Terminal" },
+    { "page": "► Device Template", "id": "2499:17740", "name": "Device Template" },
+
+    { "page": "---> Handover Management", "id": "9750:94532", "name": "Notice Management-Create Shift Log-Default" },
+
+    { "page": "---> Notice Management", "id": "9882:43066", "name": "Notice Management" },
+    { "page": "---> Notice Management", "id": "9936:22760", "name": "Notice Management-Create Notice - Filled" },
+    { "page": "---> Notice Management", "id": "9936:16646", "name": "Notice Management-Create Notice" },
+    { "page": "---> Notice Management", "id": "9936:23437", "name": "Notice Management-Edit Notice" },
+    { "page": "---> Notice Management", "id": "9973:33337", "name": "Notice Management-Edit Notice" },
+
+    { "page": "---> Completed Notice", "id": "9936:28484", "name": "Completed Notice" },
+    { "page": "---> Completed Notice", "id": "9936:31604", "name": "Completed Notice" },
+    { "page": "---> Completed Notice", "id": "9973:34730", "name": "Completed Notice" },
+    { "page": "---> Completed Notice", "id": "9936:31520", "name": "Download-Completed Notice" },
+
+    { "page": "► Operational Notice", "id": "7404:37702", "name": "Operational Notice" },
+    { "page": "► Operational Notice", "id": "7407:42357", "name": "Operational Notice" }
+  ]
+}
+

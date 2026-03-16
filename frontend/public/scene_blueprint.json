@@ -1,0 +1,88 @@
+{
+  "sceneName": "AI_Command_Center",
+  "unit": "meters",
+  "globalScaleNormalization": true,
+  "models": [
+    {
+      "id": "desk",
+      "file": "desk.glb",
+      "role": "central_workstation",
+      "position": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "targetHeight": 0.75,
+      "interaction": "open_about_section"
+    },
+    {
+      "id": "computerTerminal",
+      "file": "computer_terminal.glb",
+      "role": "developer_terminal",
+      "parent": "desk",
+      "position": [0, 0.8, -0.2],
+      "rotation": [0, 0, 0],
+      "targetHeight": 0.4,
+      "interaction": "open_backend_projects"
+    },
+    {
+      "id": "aiScreen",
+      "file": "computer_terminal.glb",
+      "role": "ai_visualization_screen",
+      "position": [0, 2.2, -3],
+      "rotation": [0, 0, 0],
+      "targetHeight": 2.0,
+      "interaction": "open_ai_detection_projects"
+    },
+    {
+      "id": "serverRack",
+      "file": "server_rack.glb",
+      "role": "backend_infrastructure",
+      "position": [-3, 0, -2],
+      "rotation": [0, 0.4, 0],
+      "targetHeight": 2.0,
+      "interaction": "open_backend_architecture"
+    },
+    {
+      "id": "machineUnit",
+      "file": "machine_unit.glb",
+      "role": "ai_compute_node",
+      "position": [-1.5, 0, -2],
+      "rotation": [0, 0, 0],
+      "targetHeight": 1.2,
+      "interaction": "open_ai_inference_system"
+    },
+    {
+      "id": "drone",
+      "file": "drone.glb",
+      "role": "drone_system",
+      "position": [2, 1.2, 1],
+      "rotation": [0, 0.8, 0],
+      "targetHeight": 0.5,
+      "animation": "hover",
+      "interaction": "open_drone_projects"
+    },
+    {
+      "id": "controlPanel",
+      "file": "control_panel.glb",
+      "role": "system_control_console",
+      "position": [1.5, 0, -1],
+      "rotation": [0, -0.5, 0],
+      "targetHeight": 1.0,
+      "interaction": "open_contact_terminal"
+    },
+    {
+      "id": "neonSign",
+      "file": "neon_sign.glb",
+      "role": "environment_light",
+      "position": [0, 2.8, -2.8],
+      "rotation": [0, 0, 0],
+      "targetHeight": 0.6
+    },
+    {
+      "id": "cablesPipes",
+      "file": "cables_pipes.glb",
+      "role": "environment_detail",
+      "position": [-2.5, 0, -1],
+      "rotation": [0, 0, 0],
+      "targetHeight": 1.0
+    }
+  ]
+}
