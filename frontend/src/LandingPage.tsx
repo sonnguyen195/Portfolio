@@ -53,7 +53,7 @@ function LandingPageInner({ data, year, onSwitchTo3D, onPreload3D }: LandingPage
 
       {/* Desktop: About (full height) | Projects carousel (center) | Experience + Contact (right) */}
       <main className="mx-auto w-full max-w-none px-4 py-5 sm:px-6 lg:px-8">
-        <div className="hidden lg:grid lg:h-[calc(100vh-4.5rem)] lg:min-h-[600px] lg:grid-cols-[1.2fr_1.6fr_1fr] lg:grid-rows-[1fr_1fr] lg:gap-6">
+        <div className="hidden lg:grid lg:h-[calc(100vh-4.5rem)] lg:min-h-[600px] lg:grid-cols-[0.95fr_1.6fr_1.25fr] lg:grid-rows-[1fr_1fr] lg:gap-6"> 
           {/* About — full height, extended for full context */}
           <div className="row-span-2 min-h-0 overflow-hidden">
             <AboutPanel
