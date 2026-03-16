@@ -7,6 +7,8 @@ export type Portfolio = {
     phone?: string
     dob?: string
     summary: string
+    github?: string
+    linkedin?: string
   }
   highlights: string[]
   skills: {

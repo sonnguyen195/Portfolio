@@ -1,9 +1,10 @@
 import './App.css'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Portfolio } from './types/portfolio'
 import type { DemoAppId } from './demo/DemoApp'
 import { DemoApp } from './demo/DemoApp'
 import { SceneLoadingScreen } from './three/SceneLoadingScreen'
+import { LandingPage } from './LandingPage'
 
 const LabScene = React.lazy(() =>
   import('./three/LabScene').then((m) => ({ default: m.LabScene }))
@@ -22,6 +23,10 @@ function getDemoIdFromPath(pathname: string): DemoAppId | null {
   return (m?.[1] as DemoAppId) ?? null
 }
 
+function isEmbedded(): boolean {
+  return typeof window !== 'undefined' && (window.self !== window.top || new URLSearchParams(window.location.search).get('embed') === '1')
+}
+
 const data: Portfolio = {
   profile: {
     name: 'Nguyễn Minh Sơn',
@@ -29,6 +34,8 @@ const data: Portfolio = {
     location: 'Ho Chi Minh City, Vietnam',
     email: 'sonson195.sn@gmail.com',
     phone: '0384860120',
+    github: 'https://github.com',
+    linkedin: 'www.linkedin.com/in/nguyen-son-887a84155',
     summary:
       'Backend Engineer (Python) with 4+ years of experience building production-grade backend systems, REST APIs and realtime platforms. Strong in system design and platform integration (PostgreSQL, Redis, MinIO, OpenSearch) with a focus on performance, observability and maintainable architecture.',
   },
@@ -112,6 +119,14 @@ const data: Portfolio = {
       stack: ['Django', 'Django REST Framework', 'Celery', 'PostgreSQL', 'Redis', 'React'],
       links: [],
     },
+    {
+      id: 'erp',
+      name: 'ERP Integration & Realtime Dashboards',
+      description:
+        'Customized ERP modules, REST APIs and webhooks for WordPress–ERP integration, realtime dashboards with socket.io.',
+      stack: ['Frappe', 'Python', 'VueJS', 'socket.io'],
+      links: [],
+    },
   ],
   interests: ['Reading books', 'Travel'],
   certificates: [
@@ -131,12 +146,14 @@ const data: Portfolio = {
 function Portfolio3DView({
   data,
   year,
+  onSwitchToLanding,
 }: {
   data: Portfolio
   mailto: string
   phone: string | null
   year: number
   setDemoAppId: (id: DemoAppId | null) => void
+  onSwitchToLanding: () => void
 }) {
   const { profile } = data
   return (
@@ -152,6 +169,16 @@ function Portfolio3DView({
       <ObjectHighlight />
       <InteractionCursor />
       <InteractionAudio />
+      <div className="modeToggle3d">
+        <button
+          type="button"
+          className="modeToggle3d__btn"
+          onClick={onSwitchToLanding}
+          aria-label="Switch to quick view"
+        >
+          <span>Quick view</span>
+        </button>
+      </div>
       <div className="overlay3d">
         <footer className="footer footer3d">
           <div className="container">© {year} {profile.name}. Built with React • Three.js • Django.</div>
@@ -167,6 +194,8 @@ function App() {
   const phone = profile.phone ? `tel:${profile.phone.replace(/\s/g, '')}` : null
   const year = useMemo(() => new Date().getFullYear(), [])
 
+  const [viewMode, setViewMode] = useState<'landing' | '3d'>('landing')
+  const [hasVisited3d, setHasVisited3d] = useState(false)
   const [demoAppId, setDemoAppIdState] = useState<DemoAppId | null>(() =>
     getDemoIdFromPath(window.location.pathname)
   )
@@ -183,18 +212,37 @@ function App() {
     return () => window.removeEventListener('popstate', onPopState)
   }, [])
 
-  useEffect(() => {
-    if (!demoAppId) {
-      import('./three/LabEnvironment').then((m) => m.preloadLabEnvironment())
-      import('./three/LabScene')
-    }
+  const preloadStartedRef = useRef(false)
+  const startPreload = useCallback(() => {
+    if (preloadStartedRef.current || demoAppId) return
+    preloadStartedRef.current = true
+    import('./three/LabEnvironment').then((m) => m.preloadLabEnvironment())
+    import('./three/LabScene')
   }, [demoAppId])
 
+  useEffect(() => {
+    if (!demoAppId) {
+      const hasIdle = typeof window.requestIdleCallback === 'function'
+      const id = hasIdle
+        ? window.requestIdleCallback(startPreload, { timeout: 2500 })
+        : window.setTimeout(startPreload, 2500)
+      return () => {
+        if (hasIdle) window.cancelIdleCallback(id)
+        else clearTimeout(id)
+      }
+    }
+  }, [demoAppId, startPreload])
+
   if (demoAppId) {
+    const embedded = isEmbedded()
     return (
-      <div className="viewWrap viewDemo" key="demo">
+      <div className={`viewWrap viewDemo ${embedded ? 'viewDemo--embedded' : ''}`} key="demo">
         <div className="viewTransition">
-          <DemoApp appId={demoAppId} onExit={() => setDemoAppId(null)} />
+          <DemoApp
+            appId={demoAppId}
+            onExit={embedded ? () => {} : () => setDemoAppId(null)}
+            embedded={embedded}
+          />
         </div>
       </div>
     )
@@ -203,13 +251,38 @@ function App() {
   return (
     <div className="viewWrap viewPortfolio" key="portfolio">
       <div className="viewTransition">
-        <Portfolio3DView
-          data={data}
-          mailto={mailto}
-          phone={phone}
-          year={year}
-          setDemoAppId={setDemoAppId}
-        />
+        {viewMode === 'landing' && (
+          <LandingPage
+            data={data}
+            year={year}
+            onSwitchTo3D={() => {
+              setHasVisited3d(true)
+              setViewMode('3d')
+            }}
+            onPreload3D={startPreload}
+          />
+        )}
+        {hasVisited3d && (
+          <div
+            className="view3dWrap"
+            style={{
+              visibility: viewMode === '3d' ? 'visible' : 'hidden',
+              position: 'fixed',
+              inset: 0,
+              zIndex: 10,
+              pointerEvents: viewMode === '3d' ? 'auto' : 'none',
+            }}
+          >
+            <Portfolio3DView
+              data={data}
+              mailto={mailto}
+              phone={phone}
+              year={year}
+              setDemoAppId={setDemoAppId}
+              onSwitchToLanding={() => setViewMode('landing')}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

@@ -590,8 +590,8 @@ function SceneObjectSvg(props: { seed: string; o: SceneObject }): ReactNode {
 const SCREEN_STORAGE_KEY = 'guardianx-demo-screen'
 const SCROLL_STORAGE_KEY = 'guardianx-demo-scroll'
 
-export function GuardianXDemo(props: { onExit: () => void }): ReactNode {
-  const { onExit } = props
+export function GuardianXDemo(props: { onExit: () => void; embedded?: boolean }): ReactNode {
+  const { onExit, embedded } = props
 
   const [role, setRole] = useState<Role>('Operator')
   const [screen, setScreen] = useState<ScreenId>(() => {
@@ -1720,7 +1720,7 @@ export function GuardianXDemo(props: { onExit: () => void }): ReactNode {
                     : 'Settings'
 
   return (
-    <div className="demoRoot">
+    <div className={cx('demoRoot', embedded && 'demoRoot--embedded')}>
       <div className="demoShell">
         <aside className="demoSidebar">
           <div className="demoBrand">
@@ -1792,9 +1792,11 @@ export function GuardianXDemo(props: { onExit: () => void }): ReactNode {
             {/* Settings and profile screens are out of demo scope; nav items removed */}
           </nav>
 
-          <button className="demoExit" onClick={onExit}>
-            ← Back to portfolio
-          </button>
+          {!embedded && (
+            <button className="demoExit" onClick={onExit}>
+              ← Back to portfolio
+            </button>
+          )}
         </aside>
 
         <main className="demoMain">
@@ -1902,10 +1904,6 @@ export function GuardianXDemo(props: { onExit: () => void }): ReactNode {
                         </div>
                         <div className="camBadges">
                           <span className={cx('badge', `badgeStatus${c.status.replaceAll(' ', '')}`)}>{c.status}</span>
-                          <span className={cx('badge', `badgeAlert${c.alert}`)}>
-                            <span className={cx('dot', c.alert === 'Alert' && 'dotPulse', c.alert === 'Critical' && 'dotPulse')} />
-                            {c.alert}
-                          </span>
                         </div>
                       </div>
 

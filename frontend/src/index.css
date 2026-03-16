@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
   --bg: #0a0e17;
@@ -13,7 +14,21 @@
   --shadow: 0 24px 75px rgba(15, 23, 42, 0.9);
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  /* Design system — 8px grid, premium dashboard */
+  --card-radius: 16px;
+  --card-padding: 20px;
+  --card-padding-lg: 24px;
+  --card-border: 1px solid rgba(148, 163, 184, 0.12);
+  --card-bg: rgba(15, 23, 42, 0.72);
+  --card-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.4);
+  --card-shadow-hover: 0 8px 32px -4px rgba(0, 0, 0, 0.5);
+  --spacing-unit: 8px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  font-family: 'Inter', 'Space Grotesk', system-ui, -apple-system, sans-serif;
   color: var(--text);
   background: var(--bg);
 
@@ -21,6 +36,67 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Shared card base — Header / Content / Footer structure */
+.card-base {
+  border-radius: var(--card-radius);
+  padding: var(--card-padding-lg);
+  border: var(--card-border);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+}
+
+/* Animated gradient border for featured preview */
+.featured-preview-border {
+  position: relative;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(34, 211, 238, 0.6),
+    rgba(139, 92, 246, 0.6),
+    rgba(34, 197, 94, 0.6),
+    rgba(34, 211, 238, 0.6)
+  );
+  background-size: 200% 100%;
+  animation: gradient-shift 5s ease-in-out infinite;
+}
+
+.featured-preview-border:hover {
+  box-shadow: 0 0 24px -4px rgba(34, 211, 238, 0.35);
+}
+
+/* Mini viewport: scale + no pointer events */
+.embed-scaled-viewport {
+  position: relative;
+}
+
+.embed-auto-scroll {
+  width: 100%;
+  height: 100%;
+  animation: embed-scroll-showcase 24s ease-in-out infinite;
+}
+
+@keyframes embed-scroll-showcase {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-80px);
+  }
+  50% {
+    transform: translateY(-160px);
+  }
+  75% {
+    transform: translateY(-80px);
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 * {

@@ -104,7 +104,11 @@ export function disposeSceneResources(scene: THREE.Object3D): void {
     if (obj.type === 'Points') {
       const points = obj as THREE.Points
       if (points.geometry) points.geometry.dispose()
-      if (points.material) points.material.dispose()
+      const mat = points.material
+      if (mat) {
+        if (Array.isArray(mat)) mat.forEach((m) => m.dispose())
+        else mat.dispose()
+      }
     }
   })
 }

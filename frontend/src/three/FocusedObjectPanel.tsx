@@ -7,7 +7,12 @@ import { memo, useMemo, useCallback } from 'react'
 import { useLabScene } from './LabSceneContext'
 import { portfolio } from './portfolioData'
 import { PROJECTS } from './projects'
-import type { PortfolioSectionId } from './portfolioData'
+import type {
+  PortfolioSectionId,
+  PortfolioSkills,
+  PortfolioExperience,
+  PortfolioContact,
+} from './portfolioData'
 import type { Project } from './projects'
 
 function HoloFrame({
@@ -195,10 +200,11 @@ function usePanelBody(
     const section = portfolio[selectedSection]
     if (!section) return null
 
-    if (selectedSection === 'skills' && 'items' in section) {
+    if (selectedSection === 'skills') {
+      const skillsSection = section as PortfolioSkills
       return (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {section.items.slice(0, 18).map((s) => (
+          {skillsSection.items.slice(0, 18).map((s) => (
             <span
               key={s}
               style={{
@@ -226,10 +232,11 @@ function usePanelBody(
       )
     }
 
-    if (selectedSection === 'experience' && 'items' in section) {
+    if (selectedSection === 'experience') {
+      const expSection = section as PortfolioExperience
       return (
         <div style={{ display: 'grid', gap: 10 }}>
-          {section.items.slice(0, 3).map((job, i) => (
+          {expSection.items.slice(0, 3).map((job, i) => (
             <div
               key={`${job.company}-${i}`}
               style={{
@@ -254,20 +261,21 @@ function usePanelBody(
     }
 
     if (selectedSection === 'contact') {
+      const contactSection = section as PortfolioContact
       return (
         <div style={{ fontSize: 13, lineHeight: 1.55 }}>
           <div style={{ marginBottom: 10 }}>
             <a
-              href={`mailto:${section.email}`}
+              href={`mailto:${contactSection.email}`}
               style={{ color: '#c8fbff', textDecoration: 'none' }}
             >
-              {section.email}
+              {contactSection.email}
             </a>
           </div>
-          {section.github ? (
+          {contactSection.github ? (
             <div style={{ marginBottom: 6 }}>
               <a
-                href={section.github}
+                href={contactSection.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: '#a9ffe6', textDecoration: 'none' }}
@@ -276,10 +284,10 @@ function usePanelBody(
               </a>
             </div>
           ) : null}
-          {section.linkedin ? (
+          {contactSection.linkedin ? (
             <div>
               <a
-                href={section.linkedin}
+                href={contactSection.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: '#a9ffe6', textDecoration: 'none' }}

@@ -349,8 +349,8 @@ const INITIAL_SOPS: SopRow[] = [
   },
 ]
 
-export function AdsDemo(props: { onExit: () => void }): ReactNode {
-  const { onExit } = props
+export function AdsDemo(props: { onExit: () => void; embedded?: boolean }): ReactNode {
+  const { onExit, embedded } = props
 
   const [screen, setScreen] = useState<ScreenId>('tickets-sop')
   const [ticketDetailId, setTicketDetailId] = useState<string | null>(null)
@@ -1091,7 +1091,7 @@ export function AdsDemo(props: { onExit: () => void }): ReactNode {
                       : 'Surveillance Analytics'
 
   return (
-    <div className="demoRoot">
+    <div className={cx('demoRoot', embedded && 'demoRoot--embedded')}>
       <div className="demoShell">
         <aside className="demoSidebar">
           <div className="demoBrand">
@@ -1180,9 +1180,11 @@ export function AdsDemo(props: { onExit: () => void }): ReactNode {
             </div>
           </nav>
 
-          <button className="demoExit" onClick={onExit}>
-            ← Back to portfolio
-          </button>
+          {!embedded && (
+            <button className="demoExit" onClick={onExit}>
+              ← Back to portfolio
+            </button>
+          )}
         </aside>
 
         <main className="demoMain">

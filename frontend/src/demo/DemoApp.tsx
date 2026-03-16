@@ -5,11 +5,11 @@ import { GuardianXDemo } from './guardianx/GuardianXDemo'
 
 export type DemoAppId = 'guardianx' | 'ads'
 
-export function DemoApp(props: { appId: DemoAppId; onExit: () => void }): ReactNode {
-  const { appId, onExit } = props
+export function DemoApp(props: { appId: DemoAppId; onExit: () => void; embedded?: boolean }): ReactNode {
+  const { appId, onExit, embedded } = props
 
-  if (appId === 'guardianx') return <GuardianXDemo onExit={onExit} />
-  if (appId === 'ads') return <AdsDemo onExit={onExit} />
+  if (appId === 'guardianx') return <GuardianXDemo onExit={onExit} embedded={embedded} />
+  if (appId === 'ads') return <AdsDemo onExit={onExit} embedded={embedded} />
 
   return null
 }
