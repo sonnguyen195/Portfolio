@@ -19,8 +19,8 @@ export function Navbar({ name, onSwitchTo3D, onPreload3D, onOpenCommandPalette }
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/[0.06] bg-zinc-950/90 shadow-[0_1px_0_0_rgba(255,255,255,0.03)] backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 w-full border-b border-white/[0.06] bg-zinc-950/90 shadow-[0_1px_0_0_rgba(255,255,255,0.03)] backdrop-blur-xl pt-[env(safe-area-inset-top)]">
+        <div className="mx-auto flex h-14 min-h-[44px] max-w-7xl items-center justify-between px-3 min-[375px]:px-4 sm:px-6 lg:px-8">
         <a
           href="#"
           className="text-sm font-semibold tracking-tight text-zinc-100 transition-colors duration-200 hover:text-white"
@@ -100,13 +100,13 @@ export function Navbar({ name, onSwitchTo3D, onPreload3D, onOpenCommandPalette }
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden border-t border-white/5 bg-zinc-950/95 backdrop-blur-xl"
           >
-            <div className="flex flex-col px-4 py-3 gap-1">
+            <div className="flex flex-col px-3 py-3 gap-0.5 min-[375px]:px-4">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.id}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm text-zinc-400 hover:bg-white/5 hover:text-zinc-100"
+                  className="flex min-h-[44px] items-center rounded-lg px-3 py-3 text-sm text-zinc-400 hover:bg-white/5 hover:text-zinc-100 active:bg-white/5"
                 >
                   {link.label}
                 </a>
@@ -114,7 +114,7 @@ export function Navbar({ name, onSwitchTo3D, onPreload3D, onOpenCommandPalette }
               <button
                 type="button"
                 onClick={onOpenCommandPalette}
-                className="rounded-lg px-3 py-2.5 text-left text-sm text-zinc-500 hover:bg-white/5 hover:text-zinc-400"
+                className="flex min-h-[44px] w-full items-center rounded-lg px-3 py-3 text-left text-sm text-zinc-500 hover:bg-white/5 hover:text-zinc-400 active:bg-white/5"
               >
                 <span className="font-mono">⌘K</span> Command palette
               </button>

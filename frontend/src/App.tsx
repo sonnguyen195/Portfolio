@@ -109,6 +109,13 @@ const data: Portfolio = {
         'Camera monitoring dashboard, event & alert management, and device control for security operations.',
       stack: ['Django', 'Celery', 'Channels', 'PostgreSQL', 'Redis', 'MinIO', 'OpenSearch'],
       links: [],
+      keyFeatures: [
+        'Real-time event processing',
+        'Websocket alert streaming',
+        'Distributed camera ingestion',
+        'OpenSearch analytics',
+      ],
+      systemArchitecture: ['Client', 'API Gateway', 'Django', 'Redis queue', 'Celery workers', 'PostgreSQL + OpenSearch'],
     },
     {
       id: 'ads',
@@ -118,6 +125,13 @@ const data: Portfolio = {
         'Security ticket lifecycle, incident-to-ticket flow, detection/exception rules, SOP workflow management and analytics for security operations.',
       stack: ['Django', 'Django REST Framework', 'Celery', 'PostgreSQL', 'Redis', 'React'],
       links: [],
+      keyFeatures: [
+        'Ticket lifecycle & SOP workflow',
+        'Incident-to-ticket automation',
+        'Detection & exception rules',
+        'Risk-based analytics',
+      ],
+      systemArchitecture: ['Client (React)', 'Django REST API', 'Celery', 'Redis', 'PostgreSQL'],
     },
     {
       id: 'erp',

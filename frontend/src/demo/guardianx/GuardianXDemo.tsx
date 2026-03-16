@@ -602,6 +602,7 @@ export function GuardianXDemo(props: { onExit: () => void; embedded?: boolean })
   const [monitorView, setMonitorView] = useState<'surveillance' | 'multi-stream'>('surveillance')
 
   const [layoutSize, setLayoutSize] = useState<1 | 4 | 9 | 16>(4)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [fullscreenCameraId, setFullscreenCameraId] = useState<string | null>(null)
   const [detailsCameraId, setDetailsCameraId] = useState<string | null>(null)
   const [snapshotCameraId, setSnapshotCameraId] = useState<string | null>(null)
@@ -1722,16 +1723,34 @@ export function GuardianXDemo(props: { onExit: () => void; embedded?: boolean })
   return (
     <div className={cx('demoRoot', embedded && 'demoRoot--embedded')}>
       <div className="demoShell">
-        <aside className="demoSidebar">
-          <div className="demoBrand">
-            <span className="demoBrandMark" />
-            <div>
-              <div className="demoBrandName">GuardianX</div>
-              <div className="demoBrandMeta">Security & surveillance</div>
+        <aside className={cx('demoSidebar', mobileMenuOpen && 'demoSidebar--menuOpen')}>
+          <div className="demoSidebarHeader">
+            <div className="demoBrand">
+              <span className="demoBrandMark" />
+              <div>
+                <div className="demoBrandName">GuardianX</div>
+                <div className="demoBrandMeta">Security & surveillance</div>
+              </div>
+            </div>
+            <div className="demoSidebarHeaderActions">
+              <button
+                type="button"
+                className="demoMobileMenuBtn"
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={mobileMenuOpen}
+                onClick={() => setMobileMenuOpen((o) => !o)}
+              >
+                <span className="demoMobileMenuBtnIcon" aria-hidden />
+              </button>
+              {!embedded && (
+                <button className="demoExit" onClick={onExit}>
+                  ← Back
+                </button>
+              )}
             </div>
           </div>
 
-          <nav className="demoNav">
+          <nav className="demoNav" onClick={() => setMobileMenuOpen(false)}>
             <div className="demoNavGroup">
               <div className="demoNavGroupTitle">Surveillance</div>
               <button
@@ -1791,12 +1810,6 @@ export function GuardianXDemo(props: { onExit: () => void; embedded?: boolean })
 
             {/* Settings and profile screens are out of demo scope; nav items removed */}
           </nav>
-
-          {!embedded && (
-            <button className="demoExit" onClick={onExit}>
-              ← Back to portfolio
-            </button>
-          )}
         </aside>
 
         <main className="demoMain">

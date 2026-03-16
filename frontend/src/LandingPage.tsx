@@ -42,7 +42,7 @@ function LandingPageInner({ data, year, onSwitchTo3D, onPreload3D }: LandingPage
   }, [onSwitchTo3D])
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen min-w-0 overflow-x-hidden bg-zinc-950 text-zinc-100">
       <BackgroundAnimation />
       <Navbar
         name={profile.name}
@@ -52,8 +52,8 @@ function LandingPageInner({ data, year, onSwitchTo3D, onPreload3D }: LandingPage
       />
 
       {/* Desktop: About (full height) | Projects carousel (center) | Experience + Contact (right) */}
-      <main className="mx-auto w-full max-w-none px-4 py-5 sm:px-6 lg:px-8">
-        <div className="hidden lg:grid lg:h-[calc(100vh-4.5rem)] lg:min-h-[600px] lg:grid-cols-[0.95fr_1.6fr_1.25fr] lg:grid-rows-[1fr_1fr] lg:gap-6"> 
+      <main className="mx-auto w-full max-w-none overflow-x-hidden px-3 py-4 min-[375px]:px-4 sm:px-6 sm:py-5 md:px-6 lg:px-8">
+        <div className="hidden lg:grid lg:h-[calc(100vh-4.5rem)] lg:min-h-[600px] lg:grid-cols-[0.95fr_1.6fr_1.25fr] lg:grid-rows-[1fr_1fr] lg:gap-6">
           {/* About — full height, extended for full context */}
           <div className="row-span-2 min-h-0 overflow-hidden">
             <AboutPanel
@@ -81,15 +81,17 @@ function LandingPageInner({ data, year, onSwitchTo3D, onPreload3D }: LandingPage
           </div>
         </div>
 
-        {/* Mobile: vertical scroll */}
-        <div className="flex flex-col gap-8 pb-16 pt-2 lg:hidden">
+        {/* Mobile & tablet: vertical scroll */}
+        <div className="flex flex-col gap-5 min-[375px]:gap-6 sm:gap-8 pb-20 sm:pb-24 pt-1 sm:pt-2 lg:hidden">
           <AboutPanel
             name={profile.name}
             title={profile.title}
             summary={profile.summary}
             skills={allSkills}
           />
-          <FeaturedProjectCarousel projects={projects} />
+          <section id="projects" className="scroll-mt-16 min-h-0 min-w-0 overflow-visible">
+            <FeaturedProjectCarousel projects={projects} />
+          </section>
           <ExperienceTimeline experience={experience} />
           <ContactPanel
             email={profile.email}

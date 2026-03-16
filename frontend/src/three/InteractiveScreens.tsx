@@ -224,8 +224,18 @@ function InteractiveScreensInner() {
         )
 
     const hitObject = sectionHit?.object ?? screenHit?.object ?? null
-    setCursorPointer(!!hitObject)
-    hoveredRef.current = hitObject
+    const isFocused = selectedSection != null || selectedProject != null
+    /* When an object is focused/clicked, hide all hover effects (label, cursor, glow) */
+    if (isFocused) {
+      setCursorPointer(false)
+      setHoveredObjectId(null)
+      setHoveredObjectLabel(null)
+      hoveredRef.current = null
+      lastHoverIdRef.current = null
+    } else {
+      setCursorPointer(!!hitObject)
+      hoveredRef.current = hitObject
+    }
 
     const sectionEntry = hitObject
       ? sectionObjects.find((e) => isMeshInEntry(e.mesh, hitObject as THREE.Object3D))
@@ -246,7 +256,7 @@ function InteractiveScreensInner() {
         : screenEntry !== undefined
           ? (getInteractionEntry(meshName(screenEntry.mesh))?.label ?? 'Projects')
           : null
-    if (hoverId !== lastHoverIdRef.current) {
+    if (!isFocused && hoverId !== lastHoverIdRef.current) {
       lastHoverIdRef.current = hoverId
       setHoveredObjectId(hoverId)
       setHoveredObjectLabel(hoverLabel)

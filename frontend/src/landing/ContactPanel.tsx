@@ -22,7 +22,7 @@ export function ContactPanel({ email, github, linkedin }: ContactPanelProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="card-base scroll-mt-20 flex h-full flex-col"
+      className="card-base scroll-mt-20 flex h-full min-w-0 flex-col overflow-hidden p-3 min-[375px]:p-4 sm:p-6"
     >
       {/* Header */}
       <h3 className="mb-4 text-sm font-semibold text-zinc-300">Contact</h3>
@@ -36,7 +36,7 @@ export function ContactPanel({ email, github, linkedin }: ContactPanelProps) {
       <button
         type="button"
         onClick={copyEmail}
-        className="mt-3 min-h-[40px] min-w-[40px] cursor-pointer rounded-xl border border-white/[0.08] px-3 py-2 text-xs text-zinc-500 transition-all duration-200 hover:border-cyan-500/40 hover:bg-cyan-500/10 hover:text-cyan-400/90"
+        className="mt-3 min-h-[44px] min-w-[44px] sm:min-h-[40px] sm:min-w-[40px] cursor-pointer rounded-xl border border-white/[0.08] px-3 py-2.5 sm:py-2 text-xs text-zinc-500 transition-all duration-200 hover:border-cyan-500/40 hover:bg-cyan-500/10 hover:text-cyan-400/90 active:scale-[0.98]"
       >
         {copied ? 'Copied!' : 'Copy email'}
       </button>

@@ -39,6 +39,8 @@ export type Portfolio = {
     stack: string[]
     links: Array<{ label: string; url: string }>
     demoId?: 'guardianx' | 'ads'
+    keyFeatures?: string[]
+    systemArchitecture?: string[]
   }>
   interests: string[]
   certificates: Array<{

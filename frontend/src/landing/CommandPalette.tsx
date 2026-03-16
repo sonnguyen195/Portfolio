@@ -66,7 +66,7 @@ export function CommandPalette({ open, onClose, onSwitchTo3D }: CommandPalettePr
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
-            className="fixed left-1/2 top-[20%] z-[101] w-full max-w-md -translate-x-1/2 rounded-2xl border border-white/10 bg-zinc-900/95 p-2 shadow-2xl backdrop-blur-xl"
+            className="fixed left-4 right-4 sm:left-1/2 sm:right-auto top-[15%] sm:top-[20%] z-[101] w-[calc(100%-2rem)] sm:w-full sm:max-w-md sm:-translate-x-1/2 rounded-2xl border border-white/10 bg-zinc-900/95 p-2 shadow-2xl backdrop-blur-xl"
           >
             <div className="flex items-center gap-2 px-3 py-2 text-zinc-500">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

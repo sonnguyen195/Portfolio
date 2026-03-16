@@ -408,6 +408,7 @@ export function AdsDemo(props: { onExit: () => void; embedded?: boolean }): Reac
   const [searchIncident, setSearchIncident] = useState('')
   const [searchRule, setSearchRule] = useState('')
 
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [role, setRole] = useState<Role>('Operator')
   const [sops, setSops] = useState<SopRow[]>(INITIAL_SOPS)
   const [sopForm, setSopForm] = useState<null | { mode: 'new' | 'edit'; sopId?: string }>(null)
@@ -1093,16 +1094,34 @@ export function AdsDemo(props: { onExit: () => void; embedded?: boolean }): Reac
   return (
     <div className={cx('demoRoot', embedded && 'demoRoot--embedded')}>
       <div className="demoShell">
-        <aside className="demoSidebar">
-          <div className="demoBrand">
-            <span className="demoBrandMark" />
-            <div>
-              <div className="demoBrandName">ADS & SOP</div>
-              <div className="demoBrandMeta">Ticket, exception & workflow</div>
+        <aside className={cx('demoSidebar', mobileMenuOpen && 'demoSidebar--menuOpen')}>
+          <div className="demoSidebarHeader">
+            <div className="demoBrand">
+              <span className="demoBrandMark" />
+              <div>
+                <div className="demoBrandName">ADS & SOP</div>
+                <div className="demoBrandMeta">Ticket, exception & workflow</div>
+              </div>
+            </div>
+            <div className="demoSidebarHeaderActions">
+              <button
+                type="button"
+                className="demoMobileMenuBtn"
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={mobileMenuOpen}
+                onClick={() => setMobileMenuOpen((o) => !o)}
+              >
+                <span className="demoMobileMenuBtnIcon" aria-hidden />
+              </button>
+              {!embedded && (
+                <button className="demoExit" onClick={onExit}>
+                  ← Back
+                </button>
+              )}
             </div>
           </div>
 
-          <nav className="demoNav">
+          <nav className="demoNav" onClick={() => setMobileMenuOpen(false)}>
             <div className="demoNavGroup">
               <div className="demoNavGroupTitle">Tickets</div>
               <button
@@ -1179,12 +1198,6 @@ export function AdsDemo(props: { onExit: () => void; embedded?: boolean }): Reac
               </button>
             </div>
           </nav>
-
-          {!embedded && (
-            <button className="demoExit" onClick={onExit}>
-              ← Back to portfolio
-            </button>
-          )}
         </aside>
 
         <main className="demoMain">

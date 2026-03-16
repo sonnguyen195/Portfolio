@@ -28,7 +28,7 @@ export function ExperienceTimeline({ experience }: ExperienceTimelineProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="card-base scroll-mt-20 flex h-full flex-col"
+      className="card-base scroll-mt-20 flex h-full min-w-0 flex-col overflow-hidden p-3 min-[375px]:p-4 sm:p-6"
     >
       {/* Header */}
       <h3 className="mb-3 text-sm font-semibold text-zinc-300">Experience</h3>
