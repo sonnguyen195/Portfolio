@@ -7,7 +7,7 @@ type Project = {
   name: string
   description: string
   stack: string[]
-  demoId?: 'guardianx' | 'ads'
+  demoId?: 'guardianx' | 'ads' | 'soc' | 'guardianx-3d'
   keyFeatures?: string[]
   systemArchitecture?: string[]
 }

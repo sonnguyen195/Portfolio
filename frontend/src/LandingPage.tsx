@@ -53,7 +53,7 @@ function LandingPageInner({ data, year, onSwitchTo3D, onPreload3D }: LandingPage
 
       {/* Desktop: About (full height) | Projects carousel (center) | Experience + Contact (right) */}
       <main className="mx-auto w-full max-w-none overflow-x-hidden px-3 py-4 min-[375px]:px-4 sm:px-6 sm:py-5 md:px-6 lg:px-8">
-        <div className="hidden lg:grid lg:h-[calc(100vh-4.5rem)] lg:min-h-[600px] lg:grid-cols-[0.95fr_1.6fr_1.25fr] lg:grid-rows-[1fr_1fr] lg:gap-6">
+        <div className="hidden lg:grid lg:h-[calc(100vh-4.5rem)] lg:min-h-[600px] lg:grid-cols-[0.95fr_1.6fr_1.25fr] lg:grid-rows-[2fr_0.55fr] lg:gap-6">
           {/* About — full height, extended for full context */}
           <div className="row-span-2 min-h-0 overflow-hidden">
             <AboutPanel
@@ -92,12 +92,19 @@ function LandingPageInner({ data, year, onSwitchTo3D, onPreload3D }: LandingPage
           <section id="projects" className="scroll-mt-16 min-h-0 min-w-0 overflow-visible">
             <FeaturedProjectCarousel projects={projects} />
           </section>
-          <ExperienceTimeline experience={experience} />
-          <ContactPanel
-            email={profile.email}
-            github={profile.github}
-            linkedin={profile.linkedin}
-          />
+          {/* Experience + Contact: Experience gets more space (2:1 ratio) */}
+          <div className="flex min-h-[min(65vh,720px)] flex-col gap-4 sm:min-h-[min(70vh,800px)]">
+            <div className="min-h-0 flex-[2] overflow-hidden">
+              <ExperienceTimeline experience={experience} />
+            </div>
+            <div className="min-h-0 flex-1 overflow-hidden">
+              <ContactPanel
+                email={profile.email}
+                github={profile.github}
+                linkedin={profile.linkedin}
+              />
+            </div>
+          </div>
           <footer className="py-10 text-center text-xs text-zinc-600">
             © {year} {profile.name}. Built with React · Three.js · Django
           </footer>

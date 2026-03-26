@@ -2,7 +2,7 @@ import './App.css'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Portfolio } from './types/portfolio'
 import type { DemoAppId } from './demo/DemoApp'
-import { DemoApp } from './demo/DemoApp'
+import { DemoActivationProvider, DemoActivationScene } from './demo/DemoActivation'
 import { SceneLoadingScreen } from './three/SceneLoadingScreen'
 import { LandingPage } from './LandingPage'
 
@@ -19,8 +19,15 @@ import { InteractionCursor } from './three/InteractionCursor'
 import { InteractionAudio } from './three/InteractionAudio'
 
 function getDemoIdFromPath(pathname: string): DemoAppId | null {
-  const m = pathname.match(/^\/demo\/(guardianx|ads)$/)
+  const m = pathname.match(/^\/demo\/(guardianx|ads|soc|guardianx-3d)$/)
   return (m?.[1] as DemoAppId) ?? null
+}
+
+const VIEW_MODE_KEY = 'portfolio-view-mode'
+
+function getInitialViewMode(): 'landing' | '3d' {
+  if (typeof window === 'undefined') return 'landing'
+  return sessionStorage.getItem(VIEW_MODE_KEY) === '3d' ? '3d' : 'landing'
 }
 
 function isEmbedded(): boolean {
@@ -53,29 +60,47 @@ const data: Portfolio = {
   experience: [
     {
       company: 'Gaion',
-      role: 'Backend Engineer — GAION (Python Project)',
+      role: 'Backend Engineer — Python Project',
       location: 'Ho Chi Minh City',
       start: '2025-06',
       end: null,
       bullets: [
-        'Designed DynamicSchema core (In/Out/Create/Update) with M2M support and optimized bulk loading.',
-        'Built a Measurement framework (simple/range/dimensions) with unit conversion and standardized validation/formatting.',
-        'Reduced latency on heavy endpoints using a universal cache with selective invalidation, warmup and herd protection.',
+        'Designed and maintained REST APIs with consistent contracts, pagination, and validation for production services.',
+        'Designed and implemented DynamicSchema core (In/Out/Create/Update), including M2M handling and optimized bulk measurement loading for flexible API outputs.',
+        'Built a Measurement framework (simple/range/dimensions) with unit conversion, user preferences, and standardized formatting/validation.',
+        'Implemented caching & performance optimization (universal cache, hint registry, selective invalidation, warmup, TTL, herd protection) to improve heavy-endpoint latency.',
+        'Standardized pagination & response contracts using OptimizedPaginator + BaseResponse for consistent metadata and smaller list payloads.',
+        'Added logging/observability (filtered DB logs, request-level middleware, context tracing) to speed up production debugging.',
+        'Delivered Delivery operations: status workflow, approvals/checklists, status mapping, route/items, confirmation/return flows, and map/weather integration.',
+        'Built Devices management: schema/services for packaging/sensor/camera/power/navigation, device library, measurement-ready models, and large migrations.',
+        'Implemented Surveillance: mission builder, profile automation, multi-drone assignment per mission, GCS/QGroundControl integration, and video analysis/reporting.',
+        'Developed Terminals & Routes: terminals, routes, operating schedules/exceptions, and route services.',
+        'Built media processing pipeline including preview and detect services, integrated with surveillance and video stream monitoring.',
+        'Managed Stream monitors: AI monitor schemas, MinIO integration, AI detection service integration, and realtime drawing sessions.',
+        'Implemented video processing pipeline: extracted frames from RTSP streams (OpenCV), sent to AI detection service, rendered bounding boxes/labels/confidence, streamed annotated frames via FFmpeg.',
+        'Delivered Dashboard & Task status: configurable panels and task progress tracking.',
+        'Integrated Third-party APIs (Anyang/ETRI): schemas/services/views, API key controller, and automation/status mapping.',
       ],
-      tech: ['Django Ninja', 'Celery', 'Channels', 'PostgreSQL', 'Redis'],
+      tech: ['Django Ninja', 'Django ORM', 'Celery', 'Channels', 'PostgreSQL', 'Redis', 'MinIO', 'OpenSearch'],
     },
     {
       company: 'Gaion',
-      role: 'Backend Engineer — GAION (Security Operations Platform)',
+      role: 'Backend Engineer — Security Operations Platform',
       location: 'Ho Chi Minh City',
       start: '2024-04',
       end: '2025-05',
       bullets: [
-        'Designed a modular security operations platform: tickets/SOP, rules, reports, threat intel and dashboards.',
-        'Implemented full SOP ticket workflow with audit-friendly activity logging.',
-        'Hardened authentication with JWT, OTP 2FA, password rules and session control/timeout middleware.',
+        'Designed and implemented a secure backend platform for security operations management, organized into modular Django apps (tickets/SOP, rules, reports, threat intel, dashboards, handover, forum).',
+        'Built a full SOP Ticket incident workflow: listing/detail, controlled updates, action pipeline (approve/reject/withdraw/close/review/request support), comments, and audit-friendly activity logging.',
+        'Implemented concurrency-safe ticket handling via record-locking on ticket detail to prevent conflicting edits during analyst collaboration.',
+        'Delivered Report management (Report/Type/Template) with publish/unpublish flows, timezone & language-aware formatting, and document export/conversion (HTML → PDF/Word).',
+        'Developed Threat Intelligence management for IOC operations (IP/CIDR validation, advanced filtering/search, CSV export, block/unblock with approval metadata) and linkage to related tickets.',
+        'Built RBAC authorization using role-based Menu/SubTab permissions (C/R/U/D) and dynamic menu-tree generation with multi-language support.',
+        'Implemented authentication & account security: JWT APIs, OTP (2FA) flows (QR setup/reset/verification), password rules, and session control/timeout middleware.',
+        'Delivered dynamic dashboards: persisted panel configs, automatic dashboard menu creation/updates, and auto-assigned menu-role permissions for controlled access.',
+        'Implemented operational modules: mail templates with in-use deletion protection, alarm sound/severity config, security news sources + crawling job triggers, forum knowledge base (attachments/comments), and handover shift/duty management.',
       ],
-      tech: ['Django', 'DRF', 'SimpleJWT', 'Celery', 'PostgreSQL'],
+      tech: ['Django', 'Django REST Framework', 'SimpleJWT', 'Celery', 'Channels', 'PostgreSQL', 'Redis', 'drf-yasg', 'pandas'],
     },
     {
       company: 'Draco Fintech (draerp.vn)',
@@ -84,11 +109,43 @@ const data: Portfolio = {
       start: '2022-04',
       end: '2023-12',
       bullets: [
-        'Customized ERP modules and integrations using Frappe and Python.',
-        'Developed REST APIs and webhooks for Wordpress–ERP integration.',
-        'Implemented realtime dashboards/chat with socket.io and payment webhooks.',
+        'Team size: 7 | Tech stacks: Frappe, HeidiSQL, Python, VueJS, JS, HTML, CSS.',
+        'Implemented projects: education system for Thai Son driving training center; warehouse management system for Multivac Vietnam; Wordpress API system connecting to ERP for Misumi.',
+        'Analyzed ERP processing flow and business modules (accounting, stock, HR, education, CRM, e-commerce).',
+        'Developed check-in feature based on IP and employee location (HR module).',
+        'Developed REST APIs & webhooks for Wordpress–ERP integration; wrote test cases.',
+        'Fixed bugs and customized features; designed UI templates (HTML/JS/CSS) with backend API integration.',
+        'Integrated OCR invoice scanning using OpenCV + Tesseract; ensured stability during updates/releases.',
+        'Built realtime features with socket.io (dashboards, chat); supported import/export, GitHub versioning.',
+        'Integrated e-commerce platforms and payments (MoMo/banks) via realtime webhooks; built and maintained APIs.',
       ],
-      tech: ['Frappe', 'Python', 'VueJS', 'socket.io'],
+      tech: ['Frappe', 'Python', 'VueJS', 'socket.io', 'OpenCV', 'Tesseract'],
+    },
+    {
+      company: 'University Project',
+      role: 'Back-end Developer — Sales Website (PHP)',
+      location: 'University',
+      start: '2021-09',
+      end: '2021-12',
+      bullets: [
+        'Position: dev | Team size: 2 | Tech stacks: PHP Laravel.',
+        'Developed login/registration, product add/delete pages, and admin page.',
+        'Wrote and optimized code; supported the team to complete other parts of the web.',
+      ],
+      tech: ['PHP', 'Laravel'],
+    },
+    {
+      company: 'University Project',
+      role: 'Back-end Developer — Coffee Sales Website',
+      location: 'University',
+      start: '2021-09',
+      end: '2021-12',
+      bullets: [
+        'Position: dev | Team size: 2 | Tech stacks: NodeJs, MongoDB.',
+        'Developed login/registration, purchase/order flows, and admin page.',
+        'Wrote and optimized code; supported the team to complete other parts of the web.',
+      ],
+      tech: ['Node.js', 'MongoDB'],
     },
   ],
   education: [
@@ -132,6 +189,21 @@ const data: Portfolio = {
         'Risk-based analytics',
       ],
       systemArchitecture: ['Client (React)', 'Django REST API', 'Celery', 'Redis', 'PostgreSQL'],
+    },
+    {
+      id: 'soc-scenario',
+      demoId: 'soc',
+      name: 'SOC Scenario — 3D Threat Demo',
+      description:
+        'Cinematic 3D demo: threat detection, incident response, AI hologram assistant. Run scenario from Command Console.',
+      stack: ['React', 'Three.js', 'R3F'],
+      links: [],
+      keyFeatures: [
+        'AI hologram assistant (Jarvis-style)',
+        'Scenario timeline & Command Console',
+        '3D cyber globe & threat visualization',
+      ],
+      systemArchitecture: ['React', 'R3F', 'Scenario Engine', 'Timeline'],
     },
     {
       id: 'erp',
@@ -208,8 +280,8 @@ function App() {
   const phone = profile.phone ? `tel:${profile.phone.replace(/\s/g, '')}` : null
   const year = useMemo(() => new Date().getFullYear(), [])
 
-  const [viewMode, setViewMode] = useState<'landing' | '3d'>('landing')
-  const [hasVisited3d, setHasVisited3d] = useState(false)
+  const [viewMode, setViewMode] = useState<'landing' | '3d'>(getInitialViewMode)
+  const [hasVisited3d, setHasVisited3d] = useState(() => getInitialViewMode() === '3d')
   const [demoAppId, setDemoAppIdState] = useState<DemoAppId | null>(() =>
     getDemoIdFromPath(window.location.pathname)
   )
@@ -225,6 +297,10 @@ function App() {
     window.addEventListener('popstate', onPopState)
     return () => window.removeEventListener('popstate', onPopState)
   }, [])
+
+  useEffect(() => {
+    sessionStorage.setItem(VIEW_MODE_KEY, viewMode)
+  }, [viewMode])
 
   const preloadStartedRef = useRef(false)
   const startPreload = useCallback(() => {
@@ -247,58 +323,67 @@ function App() {
     }
   }, [demoAppId, startPreload])
 
-  if (demoAppId) {
-    const embedded = isEmbedded()
-    return (
-      <div className={`viewWrap viewDemo ${embedded ? 'viewDemo--embedded' : ''}`} key="demo">
-        <div className="viewTransition">
-          <DemoApp
-            appId={demoAppId}
-            onExit={embedded ? () => {} : () => setDemoAppId(null)}
-            embedded={embedded}
-          />
-        </div>
-      </div>
-    )
-  }
+  const embedded = isEmbedded()
+  const demoActive = Boolean(demoAppId)
+  const is3dVisible = viewMode === '3d' && !demoActive
 
   return (
-    <div className="viewWrap viewPortfolio" key="portfolio">
-      <div className="viewTransition">
-        {viewMode === 'landing' && (
-          <LandingPage
-            data={data}
-            year={year}
-            onSwitchTo3D={() => {
-              setHasVisited3d(true)
-              setViewMode('3d')
-            }}
-            onPreload3D={startPreload}
-          />
-        )}
-        {hasVisited3d && (
-          <div
-            className="view3dWrap"
-            style={{
-              visibility: viewMode === '3d' ? 'visible' : 'hidden',
-              position: 'fixed',
-              inset: 0,
-              zIndex: 10,
-              pointerEvents: viewMode === '3d' ? 'auto' : 'none',
-            }}
-          >
-            <Portfolio3DView
+    <DemoActivationProvider activeDemoId={demoAppId} onActivate={setDemoAppId}>
+      {/* Portfolio layer — 3D view stays mounted after first visit so state is preserved on Quick view ↔ 3D Lab toggle */}
+      <div className={`viewWrap viewPortfolio ${demoActive ? 'viewPortfolio--demoActive' : ''}`} key="portfolio">
+        <div className="viewTransition">
+          {viewMode === 'landing' && !demoActive && (
+            <LandingPage
               data={data}
-              mailto={mailto}
-              phone={phone}
               year={year}
-              setDemoAppId={setDemoAppId}
-              onSwitchToLanding={() => setViewMode('landing')}
+              onSwitchTo3D={() => {
+                setHasVisited3d(true)
+                setViewMode('3d')
+              }}
+              onPreload3D={startPreload}
+            />
+          )}
+          {hasVisited3d && (
+            <div
+              className="view3dWrap"
+              style={{
+                visibility: is3dVisible ? 'visible' : 'hidden',
+                position: 'fixed',
+                inset: 0,
+                zIndex: 10,
+                pointerEvents: is3dVisible ? 'auto' : 'none',
+              }}
+            >
+              <Portfolio3DView
+                data={data}
+                mailto={mailto}
+                phone={phone}
+                year={year}
+                setDemoAppId={setDemoAppId}
+                onSwitchToLanding={() => setViewMode('landing')}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Demo overlay — rendered on top when demo is open; 3D view stays mounted underneath */}
+      {demoActive && (
+        <div
+          className={`viewWrap viewDemo ${embedded ? 'viewDemo--embedded' : ''}`}
+          key="demo"
+          style={{ position: 'fixed', inset: 0, zIndex: 20 }}
+        >
+          <div className="viewTransition">
+            <DemoActivationScene
+              appId={demoAppId!}
+              onExit={embedded ? () => {} : () => setDemoAppId(null)}
+              embedded={embedded}
             />
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </DemoActivationProvider>
   )
 }
 

@@ -1,0 +1,5 @@
+export { GuardianXWebGLEngine } from './GuardianXWebGLEngine'
+export { runGuardianXSimulation, GX_SIMULATION_REGISTRY } from './GuardianXSimulation'
+export type { GuardianXSimulationId, GxSimCallbacks } from './GuardianXSimulation'
+export type { DroneState, MissionZone, TerminalNode, CityBlock, MissionType } from './types'
+export { TERMINAL_NODES, MISSION_ZONES, DISTRICT_LABELS, FLIGHT_ROUTES } from './cityData'

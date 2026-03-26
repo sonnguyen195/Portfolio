@@ -5,6 +5,8 @@
  */
 import { memo, useMemo, useCallback } from 'react'
 import { useLabScene } from './LabSceneContext'
+import { useDemoActivation } from '../demo/DemoActivation'
+import type { DemoAppId } from '../demo/DemoApp'
 import { portfolio } from './portfolioData'
 import { PROJECTS } from './projects'
 import type {
@@ -116,16 +118,25 @@ function HoloFrame({
   )
 }
 
+function getDemoAppIdFromPath(path: string | null): DemoAppId | null {
+  const m = path?.match(/\/demo\/(guardianx|ads|soc|guardianx-3d)$/)
+  return (m?.[1] as DemoAppId) ?? null
+}
+
 function usePanelBody(
   selectedSection: PortfolioSectionId | null,
   selectedProject: Project | null
 ): React.ReactNode {
+  const { activateDemo, preloadDemo } = useDemoActivation()
+
   return useMemo(() => {
     if (selectedProject) {
       const projectsWithDemo = PROJECTS.filter((p) => p.demo)
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, fontSize: 13, lineHeight: 1.45 }}>
-          {projectsWithDemo.map((proj) => (
+          {projectsWithDemo.map((proj) => {
+            const demoAppId = getDemoAppIdFromPath(proj.demo)
+            return (
             <div
               key={proj.id}
               style={{
@@ -155,7 +166,24 @@ function usePanelBody(
                 ))}
               </div>
               <div style={{ display: 'flex', gap: 10 }}>
-                {proj.demo ? (
+                {proj.demo && demoAppId ? (
+                  <button
+                    type="button"
+                    onClick={() => activateDemo(demoAppId)}
+                    onMouseEnter={() => preloadDemo(demoAppId)}
+                    style={{
+                      fontSize: 12,
+                      padding: '7px 10px',
+                      borderRadius: 8,
+                      background: 'rgba(0,229,255,0.12)',
+                      border: '1px solid rgba(0,229,255,0.34)',
+                      color: '#c8fbff',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Open demo
+                  </button>
+                ) : proj.demo ? (
                   <a
                     href={proj.demo}
                     style={{
@@ -191,7 +219,8 @@ function usePanelBody(
                 ) : null}
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
       )
     }

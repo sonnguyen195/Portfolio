@@ -53,7 +53,7 @@ type Project = {
   name: string
   description: string
   stack: string[]
-  demoId?: 'guardianx' | 'ads'
+  demoId?: 'guardianx' | 'ads' | 'soc' | 'guardianx-3d'
   keyFeatures?: string[]
   systemArchitecture?: string[]
 }
@@ -106,9 +106,8 @@ export function FeaturedProject({ project }: FeaturedProjectProps) {
         onMouseLeave={() => setPreviewHovered(false)}
       >
         <div
-          className={`relative h-full w-full overflow-hidden rounded-t-[14px] bg-zinc-950 transition-all duration-300 ${
-            previewHovered ? 'shadow-[0_0_32px_-6px_rgba(34,211,238,0.4)]' : ''
-          }`}
+          className={`relative h-full w-full overflow-hidden rounded-t-[14px] bg-zinc-950 transition-all duration-300 ${previewHovered ? 'shadow-[0_0_32px_-6px_rgba(34,211,238,0.4)]' : ''
+            }`}
         >
           {embedSrc ? (
             <>

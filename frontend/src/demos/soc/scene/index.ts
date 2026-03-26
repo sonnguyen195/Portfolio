@@ -1,0 +1,1 @@
+export { SocDemoScene } from './SocDemoScene'
