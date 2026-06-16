@@ -1,5 +1,6 @@
 export type Portfolio = {
   profile: {
+    avatar?: string
     name: string
     title: string
     location: string

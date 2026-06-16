@@ -1,4 +1,3 @@
-export { Navbar } from './Navbar'
 export { AboutPanel } from './AboutPanel'
 export { FeaturedProject } from './FeaturedProject'
 export { FeaturedProjectCarousel } from './FeaturedProjectCarousel'

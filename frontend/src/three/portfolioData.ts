@@ -5,6 +5,7 @@
 export type PortfolioSectionId = 'about' | 'skills' | 'projects' | 'experience' | 'contact'
 
 export type PortfolioAbout = {
+  avatar?: string
   title: string
   text: string
 }
@@ -56,6 +57,7 @@ export type PortfolioData = {
 
 export const portfolio: PortfolioData = {
   about: {
+    avatar: '/media/avatar.png',
     title: 'About Me',
     text: 'Backend Engineer (Python) with 4+ years of experience building production-grade backend systems, REST APIs and realtime platforms. Strong in system design and platform integration (PostgreSQL, Redis, MinIO, OpenSearch) with a focus on performance, observability and maintainable architecture.',
   },

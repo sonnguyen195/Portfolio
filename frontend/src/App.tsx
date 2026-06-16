@@ -36,15 +36,16 @@ function isEmbedded(): boolean {
 
 const data: Portfolio = {
   profile: {
+    avatar: '/media/avatar.png',
     name: 'Nguyễn Minh Sơn',
-    title: 'Backend Engineer (Python)',
+    title: 'Backend Engineer',
     location: 'Ho Chi Minh City, Vietnam',
     email: 'sonson195.sn@gmail.com',
     phone: '0384860120',
     github: 'https://github.com',
     linkedin: 'www.linkedin.com/in/nguyen-son-887a84155',
     summary:
-      'Backend Engineer (Python) with 4+ years of experience building production-grade backend systems, REST APIs and realtime platforms. Strong in system design and platform integration (PostgreSQL, Redis, MinIO, OpenSearch) with a focus on performance, observability and maintainable architecture.',
+      'Backend Engineer  with 4+ years of experience building production-grade backend systems, REST APIs and realtime platforms. Strong in system design and platform integration (PostgreSQL, Redis, MinIO, OpenSearch) with a focus on performance, observability and maintainable architecture.',
   },
   highlights: [
     'Design and maintain REST APIs with clear contracts, consistent pagination and validation.',

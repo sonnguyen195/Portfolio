@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+
 
 /** Reference size of the embedded demo (matches demoShell min layout ~1200px) */
 const EMBED_REF_W = 1280
@@ -26,23 +26,22 @@ function EmbedScaledIframe({ src, title }: { src: string; title: string }) {
   }, [])
 
   return (
-    <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+    <div ref={containerRef} className="absolute inset-0 overflow-hidden flex items-center justify-center bg-[#0d0d0d]">
       <div
-        className="embed-scaled-viewport origin-top-left"
+        className="embed-scaled-viewport"
         style={{
           width: EMBED_REF_W,
           height: EMBED_REF_H,
           transform: `scale(${scale})`,
+          transformOrigin: 'center center',
         }}
       >
-        <div className="embed-auto-scroll">
-          <iframe
-            src={src}
-            title={title}
-            className="h-full w-full border-0 pointer-events-none"
-            sandbox="allow-scripts allow-same-origin"
-          />
-        </div>
+        <iframe
+          src={src}
+          title={title}
+          className="h-full w-full border-0 pointer-events-none"
+          sandbox="allow-scripts allow-same-origin"
+        />
       </div>
     </div>
   )
@@ -88,103 +87,79 @@ function FakePreviewPlaceholder() {
 }
 
 export function FeaturedProject({ project }: FeaturedProjectProps) {
-  const [previewHovered, setPreviewHovered] = useState(false)
+  const caseStudyBtnRef = useRef<HTMLButtonElement>(null)
+  
   const demoHref = project.demoId ? `/demo/${project.demoId}` : null
   const embedSrc = project.demoId ? `${window.location.origin}/demo/${project.demoId}?embed=1` : null
 
+  useEffect(() => {
+    if (caseStudyBtnRef.current) {
+      import('../lib/animations').then(({ createMagneticEffect }) => {
+        createMagneticEffect(caseStudyBtnRef.current)
+      })
+    }
+  }, [])
+
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="group card-base flex min-h-0 min-w-0 flex-col overflow-x-hidden p-0 transition-shadow duration-300 hover:shadow-[0_8px_32px_-4px_rgba(0,0,0,0.5)] lg:h-full lg:overflow-hidden"
-    >
-      {/* Preview area — mobile: taller panel; desktop: flex-1 */}
+    <div className="group flex h-full flex-col overflow-hidden bg-zinc-950">
+      {/* Preview Area */}
       <div
-        className="featured-preview-border relative h-[220px] min-[375px]:h-[260px] sm:h-[300px] lg:h-auto lg:min-h-0 flex-none lg:flex-1 overflow-hidden rounded-t-[15px]"
-        onMouseEnter={() => setPreviewHovered(true)}
-        onMouseLeave={() => setPreviewHovered(false)}
+        className="relative flex-1 overflow-hidden"
       >
-        <div
-          className={`relative h-full w-full overflow-hidden rounded-t-[14px] bg-zinc-950 transition-all duration-300 ${previewHovered ? 'shadow-[0_0_32px_-6px_rgba(34,211,238,0.4)]' : ''
-            }`}
-        >
+        <div className="h-full w-full bg-zinc-900/50">
           {embedSrc ? (
-            <>
-              <EmbedScaledIframe src={embedSrc} title={`${project.name} preview`} />
-              <div className="absolute top-3 left-3 z-10 flex gap-1.5 pointer-events-none">
-                <span className="h-2.5 w-2.5 rounded-full bg-red-500/60" />
-                <span className="h-2.5 w-2.5 rounded-full bg-amber-500/60" />
-                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/60" />
-              </div>
-            </>
+            <EmbedScaledIframe src={embedSrc} title={`${project.name} preview`} />
           ) : (
             <FakePreviewPlaceholder />
           )}
         </div>
+        
+        {/* Project Type Badge */}
+        <div className="absolute top-6 left-6 z-10">
+          <span className="rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
+            {project.demoId ? 'Interactive Demo' : 'Case Study'}
+          </span>
+        </div>
       </div>
-      {/* Tech highlights — Key Features + System Architecture (only for demos) */}
-      {(project.keyFeatures?.length || project.systemArchitecture?.length) ? (
-        <div className="flex min-w-0 shrink-0 flex-col gap-2 border-t border-white/[0.06] bg-zinc-900/50 px-2.5 py-2 min-[375px]:px-3 min-[375px]:py-2.5">
-          {project.keyFeatures?.length ? (
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 sm:gap-x-3">
-              {project.keyFeatures.map((f) => (
-                <span key={f} className="flex items-center gap-1 text-[10px] sm:text-[11px] text-zinc-400">
-                  <span className="text-cyan-400/80 shrink-0">⚡</span>
-                  <span className="break-words">{f}</span>
-                </span>
-              ))}
-            </div>
-          ) : null}
-          {project.systemArchitecture?.length ? (
-            <div className="flex flex-col gap-0.5 min-w-0">
-              <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">
-                System architecture
+
+      {/* Content Area */}
+      <div className="flex flex-col p-8">
+        <span className="eyebrow">Featured Project</span>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-2xl font-bold text-white">{project.name}</h3>
+          <div className="flex gap-2">
+            {project.stack.slice(0, 3).map((t) => (
+              <span key={t} className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider">
+                {t}
               </span>
-              <div className="flex flex-wrap items-center gap-x-1.5 overflow-x-auto overflow-y-hidden pb-0.5 -mb-0.5">
-                {project.systemArchitecture.map((node, i) => (
-                  <span key={`${node}-${i}`} className="flex items-center gap-1.5">
-                    <span className="rounded bg-white/[0.04] px-1.5 py-0.5 text-[10px] text-zinc-400">
-                      {node}
-                    </span>
-                    {i < project.systemArchitecture!.length - 1 ? (
-                      <span className="text-zinc-600 text-[10px]">↠</span>
-                    ) : null}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ) : null}
+            ))}
+          </div>
         </div>
-      ) : null}
-      {/* Content — title, description, stack, buttons */}
-      <div className="flex min-w-0 shrink-0 flex-col p-3 min-[375px]:p-3 sm:p-4">
-        <h3 className="shrink-0 text-sm sm:text-base font-semibold text-zinc-100">{project.name}</h3>
-        <p className="mt-1.5 line-clamp-2 shrink-0 text-xs sm:text-sm text-zinc-500">{project.description}</p>
-        <div className="mt-2 flex shrink-0 flex-wrap gap-1.5">
-          {project.stack.slice(0, 5).map((t) => (
-            <span key={t} className="rounded bg-white/[0.05] px-1.5 py-0.5 text-[10px] sm:text-[11px] text-zinc-500">
-              {t}
-            </span>
-          ))}
-        </div>
-        <div className="mt-3 flex shrink-0 gap-2">
+        
+        <p className="mb-8 text-[15px] leading-relaxed text-zinc-500 max-w-xl">
+          {project.description}
+        </p>
+
+        <div className="flex items-center gap-4">
           {demoHref && (
             <a
               href={demoHref}
-              className="inline-flex min-h-[44px] min-w-[44px] sm:min-h-[40px] sm:min-w-[40px] cursor-pointer items-center justify-center gap-2 rounded-xl bg-cyan-500/20 px-4 py-2.5 sm:py-2 text-sm font-medium text-cyan-400 transition-all duration-200 hover:bg-cyan-500/30 hover:shadow-[0_0_20px_-4px_rgba(34,211,238,0.4)] active:scale-[0.98]"
+              className="group flex items-center gap-3 rounded-full bg-white px-6 py-3 text-sm font-bold text-black transition-all hover:scale-105 active:scale-95"
             >
-              Live Demo
+              Launch Project
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black/10 transition-transform group-hover:translate-x-1">
+                ↗
+              </span>
             </a>
           )}
           <button
-            type="button"
-            className="inline-flex min-h-[44px] min-w-[44px] sm:min-h-[40px] sm:min-w-[40px] cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/[0.08] px-4 py-2.5 sm:py-2 text-sm text-zinc-400 transition-all duration-200 hover:border-white/20 hover:bg-white/[0.04] hover:text-zinc-300 active:scale-[0.98]"
+            ref={caseStudyBtnRef}
+            className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm font-bold text-white backdrop-blur-sm transition-all hover:bg-white/10"
           >
-            Case Study
+            Review Code
           </button>
         </div>
       </div>
-    </motion.section>
+    </div>
   )
 }

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 
 type ExperienceEntry = {
   company: string
@@ -27,15 +26,11 @@ export function ExperienceTimeline({ experience }: ExperienceTimelineProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
   return (
-    <motion.section
-      id="experience"
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="card-base scroll-mt-20 flex h-full min-w-0 flex-col overflow-hidden p-3 min-[375px]:p-4 sm:p-6"
-    >
-      <h3 className="mb-4 text-sm font-semibold text-zinc-300">Experience</h3>
-      <div className="relative flex flex-1 flex-col gap-6 overflow-y-auto">
+    <div className="flex h-full flex-col">
+      <span className="eyebrow">Professional Path</span>
+      <h3 className="mb-4 text-xl font-bold text-white">Experience</h3>
+      
+      <div className="flex flex-1 flex-col gap-6 overflow-y-auto pr-2 custom-scrollbar">
         {experience.map((job, i) => {
           const id = `${job.company}-${job.role}-${i}`
           const isExpanded = expandedId === id
@@ -44,30 +39,30 @@ export function ExperienceTimeline({ experience }: ExperienceTimelineProps) {
           const visibleBullets = isExpanded ? bullets : bullets.slice(0, BULLETS_VISIBLE_DEFAULT)
 
           return (
-            <motion.div
-              key={id}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: 0.05 + i * 0.03 }}
-              className="relative pl-5"
-            >
+            <div key={id} className="relative pl-6">
+              {/* Timeline Line */}
               {i < experience.length - 1 && (
-                <div className="absolute left-0 top-5 h-[calc(100%+1.5rem)] w-px bg-gradient-to-b from-cyan-500/40 to-transparent" />
+                <div className="absolute left-[3px] top-7 h-[calc(100%+2rem)] w-px bg-zinc-800" />
               )}
-              <div className="absolute -left-[3px] top-1.5 h-2 w-2 shrink-0 rounded-full border-2 border-zinc-900 bg-cyan-500/80 shadow-[0_0_8px_rgba(34,211,238,0.4)]" />
-              <div className="min-w-0">
-                <p className="text-sm font-medium text-zinc-200">{job.role}</p>
-                <p className="text-xs text-zinc-500">
+              {/* Timeline Dot */}
+              <div className="absolute left-0 top-2 h-2 w-2 rounded-full border border-zinc-700 bg-white shadow-[0_0_10px_rgba(255,255,255,0.4)]" />
+              
+              <div className="flex flex-col">
+                <div className="flex items-center justify-between">
+                  <p className="text-[15px] font-bold text-white">{job.role}</p>
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+                    {formatYears(job.start, job.end)}
+                  </p>
+                </div>
+                <p className="text-xs font-medium text-zinc-400">
                   {job.company} · {job.location}
                 </p>
-                <p className="mt-0.5 text-[11px] text-cyan-500/80">{formatYears(job.start, job.end)}</p>
 
                 {bullets.length > 0 && (
-                  <ul className="mt-2.5 space-y-1.5 pl-0">
+                  <ul className="mt-4 space-y-2">
                     {visibleBullets.map((b, bi) => (
-                      <li key={bi} className="flex gap-2 text-[11px] leading-relaxed text-zinc-400">
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-cyan-500/60" />
-                        <span>{b}</span>
+                      <li key={bi} className="text-[13px] leading-relaxed text-zinc-500">
+                        {b}
                       </li>
                     ))}
                   </ul>
@@ -77,27 +72,27 @@ export function ExperienceTimeline({ experience }: ExperienceTimelineProps) {
                   <button
                     type="button"
                     onClick={() => setExpandedId(isExpanded ? null : id)}
-                    className="mt-2 text-[11px] text-cyan-500/90 hover:text-cyan-400 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-1 focus-visible:ring-offset-zinc-900"
+                    className="mt-3 w-fit text-[11px] font-bold uppercase tracking-wider text-white transition-opacity hover:opacity-70"
                   >
-                    {isExpanded ? 'Thu gọn' : `+${bullets.length - BULLETS_VISIBLE_DEFAULT} thêm`}
+                    {isExpanded ? 'Show Less' : `+${bullets.length - BULLETS_VISIBLE_DEFAULT} More`}
                   </button>
                 )}
 
-                <div className="mt-2.5 flex flex-wrap gap-1.5">
+                <div className="mt-4 flex flex-wrap gap-2">
                   {job.tech.map((t) => (
                     <span
                       key={t}
-                      className="rounded-md bg-white/[0.06] px-2 py-0.5 text-[10px] text-zinc-500"
+                      className="rounded bg-white/5 px-2 py-0.5 text-[10px] font-medium text-zinc-500 uppercase tracking-tighter"
                     >
                       {t}
                     </span>
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           )
         })}
       </div>
-    </motion.section>
+    </div>
   )
 }
